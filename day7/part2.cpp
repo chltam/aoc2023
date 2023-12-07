@@ -38,12 +38,24 @@ vector<Poker> makePokerVec(ifstream& input) {
   return poke;
 }
 
+char getHigh(string hand) {
+  char high = hand[0];
+  string order = "J123456789TQK";
+  for (int i = 0; i < 5; i++) {
+    if (order.find(hand[i]) > order.find(high))
+      high = hand[i];
+  }
+  return high;
+}
+
 void  sortType(vector<Poker> (&rank)[7], Poker& set) {
   map<char, int> freq;
   for (char c: set.hand)
     freq[c]++;
   int five = 0, four = 0, three = 0, two = 0;
-  for (auto& [key, value] : freq) {
+  for (auto& pair : freq) {
+    char key = pair.first;
+    int value = pair.second;
     if (value == 5) five++;
     else if (value == 4) four++;
     else if (value == 3) three++;
@@ -66,7 +78,7 @@ void  sortType(vector<Poker> (&rank)[7], Poker& set) {
 }
 
 bool  compare(Poker& x, Poker& y) {
-  string order = "123456789TJQK";
+  string order = "J123456789TQK";
   for (size_t i = 0; i < 5; i++) {
     if (order.find(x.hand[i]) != order.find(y.hand[i]))
       return order.find(x.hand[i]) < order.find(y.hand[i]);
